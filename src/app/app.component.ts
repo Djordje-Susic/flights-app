@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
+import { AirportService } from './shared/services/airport.service';
 import { FlydataService } from './shared/services/flydata.service';
 
 
@@ -11,15 +13,20 @@ export class AppComponent implements OnInit {
   title = 'Flights';
 
   constructor(
-    private flydataService: FlydataService
+    private flydataService: FlydataService,
+    private airportService: AirportService,
   ) { }
 
   ngOnInit(): void {
-    this.flydataService.getAll().subscribe(
-      response => {
-        console.log(response);
+    forkJoin(
+      [
+        this.airportService.getAll(),
+        this.flydataService.getAll()
+      ]
+    ).subscribe(responses=> {
+        console.log(responses[0]);
+        console.log(responses[1]);
       }
     );
   }
-
 }
