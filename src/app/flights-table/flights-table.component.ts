@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Flight } from '../shared/models/flight.model';
 
 @Component({
   selector: 'app-flights-table',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./flights-table.component.css']
 })
 export class FlightsTableComponent implements OnInit {
+  @Input() flights!: Flight[];
+  @Input() airportMap!: {[key: string]: string};
 
   constructor() { }
 

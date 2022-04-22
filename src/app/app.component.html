@@ -2,7 +2,7 @@
   <app-nav-bar></app-nav-bar>
   <div *ngIf="!isLoading; else loading" class="main-content">
     <app-filter-dropdown [options]="airportMap" [selected]="selectedAirport" [allowNotSelected]="false" (valueChanged)="onAirportChange($event)"></app-filter-dropdown>
-    <app-flights-table></app-flights-table>
+    <app-flights-table [flights]='flights' [airportMap]="airportMap"></app-flights-table>
   </div>
 </div>
 

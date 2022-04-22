@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { mergeMap, switchMap, concatMap,  take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import * as xml2js from 'xml2js';
+import { Flight } from '../models/flight.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,10 +28,10 @@ export class FlydataService {
 
   // store xml data into array variable
   parseXML(data: string) {
-    return new Promise(resolve => {
+    return new Promise<Flight[]>(resolve => {
       let
         k: string | number,
-        arr: any[] = [],
+        arr: Flight[] = [],
         parser = new xml2js.Parser({
             trim: true,
             explicitArray: false
@@ -49,8 +50,12 @@ export class FlydataService {
           delete item.$;
           arr.push(item);
         }
-
-        resolve(arr);
+        //console.log(arr);
+        // TODO refactor
+        const domestic = arr.filter(flight => {
+          return flight.dom_int == 'D';
+        });
+        resolve(domestic);
       });
     });
   }

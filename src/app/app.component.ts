@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { Airport } from './shared/models/airport.model';
+import { Flight } from './shared/models/flight.model';
 import { AirportService } from './shared/services/airport.service';
 import { FlydataService } from './shared/services/flydata.service';
 
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit {
   airports: Airport[] = [];
   airportMap: {[key: string]: string} = {};
   selectedAirport: string = 'OSL';
+  flights: Flight[] = [];
   isLoading = true;
 
   constructor(
@@ -33,9 +35,8 @@ export class AppComponent implements OnInit {
         for (const airport of this.airports) {
           Object.assign(this.airportMap, {[airport.code]: airport.name})
         }
-        // this.selectedAirport = this.airports[0].code;
 
-        console.log(responses[1]);
+        this.flights = responses[1];
         this.isLoading = false;
       }
     );
@@ -43,5 +44,8 @@ export class AppComponent implements OnInit {
 
   onAirportChange(airportCode: string){
     this.selectedAirport = airportCode;
+    this.flydataService.getAll(this.selectedAirport).subscribe(result => {
+      this.flights = result;
+    });
   }
 }
