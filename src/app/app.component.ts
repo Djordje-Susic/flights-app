@@ -11,6 +11,7 @@ import { FlydataService } from './shared/services/flydata.service';
 })
 export class AppComponent implements OnInit {
   title = 'Flights';
+  isLoading = true;
 
   constructor(
     private flydataService: FlydataService,
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit {
     ).subscribe(responses=> {
         console.log(responses[0]);
         console.log(responses[1]);
+        this.isLoading = false;
       }
     );
   }
