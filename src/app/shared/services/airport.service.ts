@@ -11,7 +11,8 @@ export class AirportService {
   constructor() { }
 
   getAll(): Observable<Airport[]> {
-    return of(this.airports).pipe(take(1));
+    const airports = this.airports.map(airport=>{return {...airport, code:airport.code.toUpperCase()}})
+    return of(airports).pipe(take(1));
   }
 
   private airports: Array<Airport> = [
