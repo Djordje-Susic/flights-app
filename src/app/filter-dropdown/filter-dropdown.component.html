@@ -1,9 +1,12 @@
 <div class="form-floating mb-3">
-  <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-    <option selected>Open this select menu</option>
-    <option value="1">One</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
+  <select class="form-select" id="{{elementId}}" aria-label="Filter dropdown" (change)="onValueChanged($event)">
+    <option *ngIf="allowNotSelected" value="" [selected]="!selected">{{notSelectedText}}</option>
+    <option
+      *ngFor="let option of options | keyvalue"
+      value="{{option.key}}"
+      [selected]="option.key === selected"
+    >{{option.value}}
+    </option>
   </select>
-  <label for="floatingSelect">Airport</label>
+  <label for="{{elementId}}">Airport</label>
 </div>
