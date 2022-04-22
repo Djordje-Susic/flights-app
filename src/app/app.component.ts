@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   title = 'Flights';
   airports: Airport[] = [];
   airportMap: {[key: string]: string} = {};
-  selectedAirport: string = 'osl';
+  selectedAirport: string = 'OSL';
   isLoading = true;
 
   constructor(
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     forkJoin(
       [
         this.airportService.getAll(),
-        this.flydataService.getAll()
+        this.flydataService.getAll(this.selectedAirport)
       ]
     ).subscribe(responses=> {
         this.airports = responses[0];

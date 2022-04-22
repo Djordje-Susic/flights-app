@@ -8,14 +8,15 @@ import * as xml2js from 'xml2js';
   providedIn: 'root'
 })
 export class FlydataService {
-  public url = `${environment.flyDataServer}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=OSL&lastUpdate=2022-04-20T15:00:00Z`;
+  public serverUrl = environment.flyDataServer;
+  ;
 
   constructor(
     private http: HttpClient
   ) { }
 
-  getAll() {
-    return this.http.get(this.url, {
+  getAll(airportCode: string) {
+    return this.http.get(`${this.serverUrl}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=${airportCode}&lastUpdate=2022-04-20T15:00:00Z`, {
       headers: new HttpHeaders().set('Accept', 'text/xml'),
       responseType: 'text'
     }).pipe(
