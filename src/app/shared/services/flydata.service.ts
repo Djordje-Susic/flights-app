@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { mergeMap, switchMap, concatMap,  take } from 'rxjs/operators';
+import { map, mergeMap, switchMap, concatMap,  take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import * as xml2js from 'xml2js';
 import { Flight } from '../models/flight.model';
@@ -10,7 +10,6 @@ import { Flight } from '../models/flight.model';
 })
 export class FlydataService {
   public serverUrl = environment.flyDataServer;
-  ;
 
   constructor(
     private http: HttpClient
@@ -22,41 +21,60 @@ export class FlydataService {
       responseType: 'text'
     }).pipe(
       take(1),
-      concatMap(response => this.parseXML(response))
+      concatMap(response => this.parseXML(response)),
+      map(response => this.parseFlights(response)),
+      map(response => this.filterDomesticFlights(response)),
     );
   }
 
-  // store xml data into array variable
-  parseXML(data: string) {
-    return new Promise<Flight[]>(resolve => {
-      let
-        k: string | number,
-        arr: Flight[] = [],
-        parser = new xml2js.Parser({
-            trim: true,
-            explicitArray: false
-          });
+  parseXML(data: string): Promise<any> {
+    return new Promise<any>(resolve => {
+      const parser = new xml2js.Parser({
+        trim: true,
+        explicitArray: false
+      });
       parser.parseString(data, function (err: any, result: any) {
-        // resolve(result);
-
-        const obj = result.airport.flights;
-
-        // console.log(result);
-        for (k in obj.flight) {
-          const item = {
-            ...obj.flight[k],
-            uniqueID: obj.flight[k].$.uniqueID,
-          };
-          delete item.$;
-          arr.push(item);
-        }
-        //console.log(arr);
-        // TODO refactor
-        const domestic = arr.filter(flight => {
-          return flight.dom_int == 'D';
-        });
-        resolve(domestic);
+        resolve(result);
       });
     });
   }
+
+  parseFlights(data: any): Flight[] {
+    const arr: Flight[] = [];
+
+    const obj = data.airport.flights;
+
+    for (let k in obj.flight) {
+      const item = {
+        ...obj.flight[k],
+        uniqueID: obj.flight[k].$.uniqueID,
+      };
+      delete item.$;
+
+      if(obj.flight[k].status){
+        item.status = {...obj.flight[k].status.$}
+      }
+
+      arr.push(item);
+    }
+
+    return arr;
+  }
+
+  filterDomesticFlights(data: Flight[]): Flight[] {
+    const domestic = data.filter(flight => {
+      return flight.dom_int.toUpperCase() == 'D';
+    });
+    return domestic;
+  }
+
+  getUniqueAirportCodesFromFlightArr(flights : Flight[]): Array<string> {
+    const arr = flights.map(flight=> {
+      return flight.airport;
+    });
+
+    return [...new Set(arr)];
+  }
+
+
 }

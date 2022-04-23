@@ -13,7 +13,7 @@ import { FlydataService } from './shared/services/flydata.service';
 })
 export class AppComponent implements OnInit {
   title = 'Flights';
-  airports: Airport[] = [];
+  //airports: Airport[] = [];
   airportMap: {[key: string]: string} = {};
   selectedAirport: string = 'OSL';
   flights: Flight[] = [];
@@ -31,12 +31,14 @@ export class AppComponent implements OnInit {
         this.flydataService.getAll(this.selectedAirport)
       ]
     ).subscribe(responses=> {
-        this.airports = responses[0];
-        for (const airport of this.airports) {
+        for (const airport of responses[0]) {
           Object.assign(this.airportMap, {[airport.code]: airport.name})
         }
 
         this.flights = responses[1];
+
+        console.log(this.flydataService.getUniqueAirportCodesFromFlightArr(this.flights))
+
         this.isLoading = false;
       }
     );
