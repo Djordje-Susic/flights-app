@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Subscription, of, forkJoin } from 'rxjs';
 import { map, mergeMap, switchMap, concatMap,  take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import * as xml2js from 'xml2js';
@@ -15,7 +16,7 @@ export class FlydataService {
     private http: HttpClient
   ) { }
 
-  getAll(airportCode: string) {
+  getAirportFlightsData(airportCode: string){
     return this.http.get(`${this.serverUrl}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=${airportCode}&lastUpdate=2022-04-20T15:00:00Z`, {
       headers: new HttpHeaders().set('Accept', 'text/xml'),
       responseType: 'text'
@@ -24,6 +25,44 @@ export class FlydataService {
       concatMap(response => this.parseXML(response)),
       map(response => this.parseFlights(response)),
       map(response => this.filterDomesticFlights(response)),
+    );
+  }
+
+  // getAirportFlightsDataObj(airportCode: string){
+  //   return this.getAirportFlightsData(airportCode).pipe(
+  //     take(1),
+  //     map(response => {
+  //       return {
+  //         [airportCode]: response
+  //       };
+  //     })
+  //   );
+  // }
+
+  getAllRelated(airportCode: string){
+    return this.getAirportFlightsData(airportCode).pipe(
+      take(1),
+      map(response => {
+        return {
+          [airportCode]: response
+        };
+      }),
+      mergeMap(response => {
+        const uniqueAirportCodes = this.getUniqueAirportCodesFromFlightArr(response[airportCode]);
+
+        if(uniqueAirportCodes.length === 0){
+          return of(response);
+        }
+
+        const observables = uniqueAirportCodes.reduce((o, key) => ({ ...o, [key]: this.getAirportFlightsData(key)}), {})
+
+        return forkJoin(observables).pipe(map(responses => {
+          uniqueAirportCodes.forEach(code => {
+            Object.assign(response, {[code]: responses[code]});
+          });
+          return response;
+        }));
+      })
     );
   }
 
@@ -44,6 +83,18 @@ export class FlydataService {
 
     const obj = data.airport.flights;
 
+    // When there is no flights return empty array
+    if(obj.flight === undefined){
+      return arr;
+    }
+
+    // When only one flight is present obj.flight will be of type object instead of array
+    // I convert it to array so further code doesn't break
+    if(!Array.isArray(obj.flight)){
+      obj.flight = [obj.flight];
+    }
+
+    // proccess array of flights
     for (let k in obj.flight) {
       const item = {
         ...obj.flight[k],
@@ -69,12 +120,8 @@ export class FlydataService {
   }
 
   getUniqueAirportCodesFromFlightArr(flights : Flight[]): Array<string> {
-    const arr = flights.map(flight=> {
-      return flight.airport;
-    });
+    const arr = flights.map(({airport})=> airport);
 
     return [...new Set(arr)];
   }
-
-
 }

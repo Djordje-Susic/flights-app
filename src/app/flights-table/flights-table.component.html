@@ -11,10 +11,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let flight of flights; let i = index">
+      <tr *ngFor="let flight of data; let i = index">
         <td>{{flight.flight_id}}</td>
-        <td>{{flight.schedule_time | date}}</td>
-        <td>{{flight.schedule_time | date}}</td>
+        <td>{{flight.departure_schedule_time | date:'H:mm'}}</td>
+        <td>{{flight.arrival_schedule_time | date:'H:mm'}}</td>
         <td>{{flight.arr_dep}}</td>
         <!-- <td>{{flight.airport}}</td> -->
         <td>{{airportMap[flight.airport.toUpperCase()]}}</td>
@@ -22,6 +22,6 @@
     </tbody>
   </table>
 
-  <span *ngIf="!flights.length">No data found</span>
+  <span *ngIf="!data.length">No data found</span>
 </div>
 

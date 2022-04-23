@@ -1,10 +1,10 @@
 import { FlightStatus } from "./flight-status.model";
 
 export class Flight {
-  uniqueId!: string;
+  uniqueID!: string;
   flight_id!: string;
   dom_int!: string;
-  schedule_time!: string;
+  schedule_time!: Date;
   arr_dep!: string;
   airport!: string;
   airline!: string;
