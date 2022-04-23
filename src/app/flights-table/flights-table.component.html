@@ -13,9 +13,9 @@
     <tbody>
       <tr *ngFor="let flight of data; let i = index">
         <td>{{flight.flight_id}}</td>
-        <td>{{flight.departure_schedule_time | date:'H:mm'}}</td>
-        <td>{{flight.arrival_schedule_time | date:'H:mm'}}</td>
-        <td>{{flight.arr_dep}}</td>
+        <td>{{flight.departure_schedule_time | date:'H:mm' | emptyText:'unknown'}}</td>
+        <td>{{flight.arrival_schedule_time | date:'H:mm' | emptyText:'unknown'}}</td>
+        <td>{{flight.arr_dep | arrDep }}</td>
         <!-- <td>{{flight.airport}}</td> -->
         <td>{{airportMap[flight.airport.toUpperCase()]}}</td>
       </tr>

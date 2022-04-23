@@ -8,6 +8,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { FilterDropdownComponent } from './filter-dropdown/filter-dropdown.component';
 import { FlightsTableComponent } from './flights-table/flights-table.component';
+import { EmptyTextPipe } from './shared/pipes/empty-text.pipe';
+import { ArrDepPipe } from './shared/pipes/arr-dep.pipe';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { FlightsTableComponent } from './flights-table/flights-table.component';
     NavBarComponent,
     SpinnerComponent,
     FilterDropdownComponent,
-    FlightsTableComponent
+    FlightsTableComponent,
+    EmptyTextPipe,
+    ArrDepPipe
   ],
   imports: [
     BrowserModule,
