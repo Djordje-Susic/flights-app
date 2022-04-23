@@ -22,8 +22,10 @@ export class FlightsTableComponent implements OnInit, OnChanges {
     this.data = this.flights[this.selectedAirportCode].map(flight => {
       let departure_schedule_time, arrival_schedule_time;
 
-      const otherTime = this.flights[flight.airport].find(elem => {
-        return elem.flight_id === flight.flight_id;
+      const otherTime = this.flights[flight.airport]?.find(elem => {
+        return (
+          elem.flight_id === flight.flight_id &&
+          elem.arr_dep !== flight.arr_dep);
       })?.schedule_time;
 
       if(flight.arr_dep === 'D') {
