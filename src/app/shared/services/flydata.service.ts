@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subscription, of, forkJoin } from 'rxjs';
+import { Subscription, of, forkJoin, Observable } from 'rxjs';
 import { map, mergeMap, switchMap, concatMap,  take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import * as xml2js from 'xml2js';
@@ -28,16 +28,21 @@ export class FlydataService {
     );
   }
 
-  // getAirportFlightsDataObj(airportCode: string){
-  //   return this.getAirportFlightsData(airportCode).pipe(
-  //     take(1),
-  //     map(response => {
-  //       return {
-  //         [airportCode]: response
-  //       };
-  //     })
-  //   );
-  // }
+  getAirportFlightsDataWithWebWorker(airportCode: string): Observable<any>{
+    return new Observable(subscriber => {
+      const worker = new Worker(new URL('../../workers/fetch.worker', import.meta.url));
+      worker.onmessage = ({ data }) => {
+        subscriber.next(data);
+        subscriber.complete();
+        worker.terminate();
+      }
+      worker.postMessage(`${this.serverUrl}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=${airportCode}&lastUpdate=2022-04-20T15:00:00Z`);
+    }).pipe(
+      concatMap(response => this.parseXML(<string>response)),
+      map(response => this.parseFlights(response)),
+      map(response => this.filterDomesticFlights(response)),
+    );
+  }
 
   getAllRelated(airportCode: string){
     return this.getAirportFlightsData(airportCode).pipe(
@@ -108,7 +113,6 @@ export class FlydataService {
 
       arr.push(item);
     }
-
     return arr;
   }
 

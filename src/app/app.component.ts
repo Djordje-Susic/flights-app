@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { Airport } from './shared/models/airport.model';
+
 import { Flight } from './shared/models/flight.model';
 import { AirportService } from './shared/services/airport.service';
 import { FlydataService } from './shared/services/flydata.service';
-
 
 @Component({
   selector: 'app-root',
@@ -13,10 +12,9 @@ import { FlydataService } from './shared/services/flydata.service';
 })
 export class AppComponent implements OnInit {
   title = 'Flights';
-  //airports: Airport[] = [];
   airportMap: {[key: string]: string} = {};
-  selectedAirport: string = 'OSL';
   flightsByAirport: {[key: string]: Flight[]} = {};
+  selectedAirport: string = 'OSL';
   isLoading = true;
 
   constructor(
@@ -25,6 +23,7 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const startTime: Date = new Date;
     forkJoin(
       {
         airportRequest: this.airportService.getAll(),
@@ -40,6 +39,8 @@ export class AppComponent implements OnInit {
 
         // console.log(this.flightsByAirport);
 
+        const currentTime = new Date;
+        console.log(currentTime.getTime() - startTime.getTime());
         this.isLoading = false;
       },
       error => console.log(error)
@@ -60,6 +61,7 @@ export class AppComponent implements OnInit {
   }
 
   // ngOnInit(): void {
+  //   const startTime: Date = new Date;
   //   forkJoin(
   //     [
   //       this.airportService.getAll(),
@@ -73,7 +75,13 @@ export class AppComponent implements OnInit {
   //       this.flightsByAirport = {[this.selectedAirport]: responses[1]};
 
   //       const uniqueCodes = this.flydataService.getUniqueAirportCodesFromFlightArr(this.flightsByAirport[this.selectedAirport]);
-  //       const observables = uniqueCodes.reduce((o, key) => ({ ...o, [key]: this.flydataService.getAirportFlightsData(key)}), {})
+  //       const observables = uniqueCodes.reduce((o, key) => ({ ...o, [key]:
+  //         // Option 1
+  //         // this.flydataService.getAirportFlightsData(key)
+
+  //         // Option 2
+  //         this.flydataService.getAirportFlightsData(key)
+  //       }), {})
 
   //       forkJoin(observables).subscribe(responses => {
   //         uniqueCodes.forEach(code => {
@@ -81,6 +89,8 @@ export class AppComponent implements OnInit {
   //         });
 
   //         // console.log(this.flightsByAirport);
+
+  //         console.log('All airports loaded:', (new Date).getTime() - startTime.getTime(), 'ms');
 
   //         this.isLoading = false;
   //       });
