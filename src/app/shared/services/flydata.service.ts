@@ -17,7 +17,7 @@ export class FlydataService {
   ) { }
 
   getAirportFlightsData(airportCode: string){
-    return this.http.get(`${this.serverUrl}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=${airportCode}&lastUpdate=2022-04-20T15:00:00Z`, {
+    return this.http.get(`${this.serverUrl}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=${airportCode}`, {
       headers: new HttpHeaders().set('Accept', 'text/xml'),
       responseType: 'text'
     }).pipe(
@@ -36,7 +36,7 @@ export class FlydataService {
         subscriber.complete();
         worker.terminate();
       }
-      worker.postMessage(`${this.serverUrl}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=${airportCode}&lastUpdate=2022-04-20T15:00:00Z`);
+      worker.postMessage(`${this.serverUrl}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=${airportCode}`);
     }).pipe(
       concatMap(response => this.parseXML(<string>response)),
       map(response => this.parseFlights(response)),

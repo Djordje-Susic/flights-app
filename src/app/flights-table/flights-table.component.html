@@ -8,6 +8,7 @@
         <th scope="col">Arrival/Departure</th>
         <!-- <th scope="col">Airport Code</th> -->
         <th scope="col">Airport Name</th>
+        <th scope="col">Status</th>
       </tr>
     </thead>
     <tbody>
@@ -18,6 +19,7 @@
         <td>{{flight.arr_dep | arrDep }}</td>
         <!-- <td>{{flight.airport}}</td> -->
         <td>{{airportMap[flight.airport.toUpperCase()]}}</td>
+        <td>{{flightStatusMap[flight.status?.code]}} {{flight.status?.time | date:'H:mm'}}</td>
       </tr>
     </tbody>
   </table>

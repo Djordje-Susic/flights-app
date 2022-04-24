@@ -1,7 +1,7 @@
 <div class="container d-flex flex-column">
   <app-nav-bar></app-nav-bar>
   <app-filter-dropdown [options]="airportMap" [selected]="selectedAirport" [allowNotSelected]="false" (valueChanged)="onAirportChange($event)"></app-filter-dropdown>
-  <app-flights-table *ngIf="!isLoading; else loading" [flights]="flightsByAirport" [selectedAirportCode]="selectedAirport" [airportMap]="airportMap"></app-flights-table>
+  <app-flights-table *ngIf="!isLoading; else loading" [flights]="flightsByAirport" [selectedAirportCode]="selectedAirport"></app-flights-table>
 </div>
 
 <ng-template #loading>
