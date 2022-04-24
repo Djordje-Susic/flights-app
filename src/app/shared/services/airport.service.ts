@@ -15,6 +15,11 @@ export class AirportService {
     return of(airports).pipe(take(1));
   }
 
+  getMap(): Observable<{[key: string]: string}> {
+    const airportMap = this.airports.reduce((o, airport)=> ({...o, [airport.code.toUpperCase()]: airport.name}), {})
+    return of(airportMap).pipe(take(1));
+  }
+
   private airports: Array<Airport> = [
     {
       "name": "Ålesund Airport, Vigra",

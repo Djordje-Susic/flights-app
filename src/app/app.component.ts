@@ -26,21 +26,16 @@ export class AppComponent implements OnInit {
     const startTime: Date = new Date;
     forkJoin(
       {
-        airportRequest: this.airportService.getAll(),
+        airportRequest: this.airportService.getMap(),
         flightsRequest: this.flydataService.getAllRelated(this.selectedAirport)
       }
     ).subscribe(
       ({airportRequest, flightsRequest})=> {
-        for (const airport of airportRequest) {
-          Object.assign(this.airportMap, {[airport.code]: airport.name})
-        }
-
+        this.airportMap = airportRequest;
         this.flightsByAirport = flightsRequest;
 
         // console.log(this.flightsByAirport);
-
-        const currentTime = new Date;
-        console.log(currentTime.getTime() - startTime.getTime());
+        console.log('All airports loaded:', (new Date).getTime() - startTime.getTime(), 'ms');
         this.isLoading = false;
       },
       error => console.log(error)
@@ -48,6 +43,7 @@ export class AppComponent implements OnInit {
   }
 
   onAirportChange(airportCode: string){
+    const startTime: Date = new Date;
     this.isLoading = true;
     this.flydataService.getAllRelated(airportCode).subscribe(
       result => {
@@ -55,6 +51,7 @@ export class AppComponent implements OnInit {
         this.selectedAirport = airportCode;
         this.isLoading = false;
         // console.log(this.flightsByAirport);
+        console.log('Airports loaded:', (new Date).getTime() - startTime.getTime(), 'ms');
       },
       error => console.log(error)
     );
