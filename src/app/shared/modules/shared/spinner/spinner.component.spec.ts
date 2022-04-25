@@ -22,4 +22,9 @@ describe('SpinnerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should see "Loading..."', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('div.d-flex div.spinner-border.text-primary span.visually-hidden')?.textContent).toContain('Loading...');
+  });
 });
