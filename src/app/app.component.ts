@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   airportMap: {[key: string]: string} = {};
   flightsByAirport: {[key: string]: Flight[]} = {};
   selectedAirport: string = 'OSL';
+  // selectedAirport: string = 'DLD';
   isLoading = true;
 
   constructor(

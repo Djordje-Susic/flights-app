@@ -10,6 +10,7 @@ import { FilterDropdownComponent } from './filter-dropdown/filter-dropdown.compo
 import { FlightsTableComponent } from './flights-table/flights-table.component';
 import { EmptyTextPipe } from './shared/pipes/empty-text.pipe';
 import { ArrDepPipe } from './shared/pipes/arr-dep.pipe';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ArrDepPipe } from './shared/pipes/arr-dep.pipe';
     FilterDropdownComponent,
     FlightsTableComponent,
     EmptyTextPipe,
-    ArrDepPipe
+    ArrDepPipe,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
