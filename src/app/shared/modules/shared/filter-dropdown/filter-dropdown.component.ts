@@ -6,6 +6,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./filter-dropdown.component.css']
 })
 export class FilterDropdownComponent implements OnInit {
+  @Input() caption: string = 'Options';
   @Input() elementId: string = 'filter-dropdown';
   @Input() options: {[key: string]: string} = {};
   @Input() selected?: string;

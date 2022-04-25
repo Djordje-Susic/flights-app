@@ -5,8 +5,7 @@
       *ngFor="let option of options | keyvalue"
       value="{{option.key}}"
       [selected]="option.key === selected"
-    >{{option.value}}
-    </option>
+    >{{option.value}}</option>
   </select>
-  <label for="{{elementId}}">Airport</label>
+  <label for="{{elementId}}">{{caption}}</label>
 </div>
