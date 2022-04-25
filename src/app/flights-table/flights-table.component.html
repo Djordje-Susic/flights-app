@@ -2,22 +2,23 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">Flight name</th>
+        <th scope="col">Flight</th>
         <th scope="col">Departure</th>
         <th scope="col">Arrival</th>
-        <th scope="col">Arrival/Departure</th>
-        <!-- <th scope="col">Airport Code</th> -->
+        <th scope="col">Direction</th>
         <th scope="col">Airport Name</th>
         <th scope="col">Status</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let flight of data; let i = index">
-        <td>{{flight.flight_id}}</td>
+        <td>
+          <div>{{flight.flight_id}}</div>
+          <div>{{airlineMap[flight.airline]}}</div>
+        </td>
         <td>{{flight.departure_schedule_time | date:'H:mm' | emptyText:'unknown'}}</td>
         <td>{{flight.arrival_schedule_time | date:'H:mm' | emptyText:'unknown'}}</td>
         <td>{{flight.arr_dep | arrDep }}</td>
-        <!-- <td>{{flight.airport}}</td> -->
         <td>{{airportMap[flight.airport.toUpperCase()]}}</td>
         <td>
           <span *ngIf="flight.status" [title]="flightStatusMap[flight.status.code].statusTextEn">
@@ -39,4 +40,3 @@
 
   <span *ngIf="!data.length">No data found</span>
 </div>
-

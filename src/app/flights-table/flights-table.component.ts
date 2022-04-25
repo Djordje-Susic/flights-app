@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Flight } from '../shared/models/flight.model';
+import { AirlineService } from '../shared/services/airline.service';
 import { AirportService } from '../shared/services/airport.service';
 import { FlightStatusService } from '../shared/services/flight-status.service';
 
@@ -13,17 +14,20 @@ export class FlightsTableComponent implements OnInit, OnChanges {
   @Input() selectedAirportCode!: string;
   airportMap: {[key: string]: string} = {};
   flightStatusMap: {[key: string]: {statusTextEn: string, icon: any}} = {};
+  airlineMap: {[key: string]: string} = {};
 
   data: any = []
 
   constructor(
     private airportService : AirportService,
-    private flightStatusService : FlightStatusService
+    private flightStatusService : FlightStatusService,
+    private airlineService : AirlineService
   ) { }
 
   ngOnInit(): void {
     this.airportService.getMap().subscribe(data => {this.airportMap = data});
     this.flightStatusService.getMap().subscribe(data => {this.flightStatusMap = data});
+    this.airlineService.getMap().subscribe(data => {this.airlineMap = data});
   }
 
   ngOnChanges(): void {

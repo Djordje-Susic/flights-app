@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 
 import { Flight } from './shared/models/flight.model';
+import { AirlineService } from './shared/services/airline.service';
 import { AirportService } from './shared/services/airport.service';
 import { FlydataService } from './shared/services/flydata.service';
 
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
   constructor(
     private flydataService: FlydataService,
     private airportService: AirportService,
+    private airlineService : AirlineService
   ) { }
 
   ngOnInit(): void {
@@ -27,7 +29,8 @@ export class AppComponent implements OnInit {
     forkJoin(
       {
         airportRequest: this.airportService.getMap(),
-        flightsRequest: this.flydataService.getAllRelated(this.selectedAirport)
+        flightsRequest: this.flydataService.getAllRelated(this.selectedAirport),
+        airlinesRequest: this.airlineService.getMap()
       }
     ).subscribe(
       ({airportRequest, flightsRequest})=> {
