@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { take } from 'rxjs/operators';
+
+import { faPlaneArrival, faPlaneDeparture, faPlaneCircleExclamation, faPlaneCircleXmark, faClock } from '@fortawesome/free-solid-svg-icons';
 
 @Injectable({
   providedIn: 'root'
@@ -8,14 +10,14 @@ import { take } from 'rxjs/operators';
 export class FlightStatusService {
 
   getMap(){
-    return of(this.flightStatusMap);
+    return of(this.flightStatusMap).pipe(take(1));
   }
 
   private flightStatusMap = {
-    'N': 'New info',
-    'E': 'New time',
-    'D': 'Departed',
-    'A': 'Arrived',
-    'C': 'Cancelled',
+    'N': {statusTextEn: 'New info', icon: faPlaneCircleExclamation},
+    'E': {statusTextEn:'New time', icon: faClock},
+    'D': {statusTextEn:'Departed', icon: faPlaneDeparture},
+    'A': {statusTextEn:'Arrived', icon: faPlaneArrival},
+    'C': {statusTextEn:'Cancelled', icon: faPlaneCircleXmark},
   }
 }

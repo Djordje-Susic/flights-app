@@ -19,7 +19,20 @@
         <td>{{flight.arr_dep | arrDep }}</td>
         <!-- <td>{{flight.airport}}</td> -->
         <td>{{airportMap[flight.airport.toUpperCase()]}}</td>
-        <td>{{flightStatusMap[flight.status?.code]}} {{flight.status?.time | date:'H:mm'}}</td>
+        <td>
+          <span *ngIf="flight.status" [title]="flightStatusMap[flight.status.code].statusTextEn">
+            <span class='icon-container'>
+              <fa-icon
+                *ngIf="flightStatusMap[flight.status?.code]?.icon"
+                [icon]="flightStatusMap[flight.status.code].icon"
+              ></fa-icon>
+            </span>
+            <span
+              *ngIf="!(flightStatusMap[flight.status?.code]?.icon)"
+            >{{flightStatusMap[flight.status?.code]?.statusTextEn}}</span>
+            {{flight.status?.time | date:'H:mm'}}
+          </span>
+        </td>
       </tr>
     </tbody>
   </table>

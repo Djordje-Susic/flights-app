@@ -12,7 +12,7 @@ export class FlightsTableComponent implements OnInit, OnChanges {
   @Input() flights!: {[key: string]: Flight[]};
   @Input() selectedAirportCode!: string;
   airportMap: {[key: string]: string} = {};
-  flightStatusMap: {[key: string]: string} = {};
+  flightStatusMap: {[key: string]: {statusTextEn: string, icon: any}} = {};
 
   data: any = []
 

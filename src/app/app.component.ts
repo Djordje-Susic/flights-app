@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
   //       }
 
   //       this.flightsByAirport = {[this.selectedAirport]: responses[1]};
-
+  //       this.isLoading = false;
   //       const uniqueCodes = this.flydataService.getUniqueAirportCodesFromFlightArr(this.flightsByAirport[this.selectedAirport]);
   //       const observables = uniqueCodes.reduce((o, key) => ({ ...o, [key]:
   //         // Option 1
@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
 
   //         console.log('All airports loaded:', (new Date).getTime() - startTime.getTime(), 'ms');
 
-  //         this.isLoading = false;
+  //         this.flightsByAirport = {... this.flightsByAirport}
   //       });
   //     }
   //   );
