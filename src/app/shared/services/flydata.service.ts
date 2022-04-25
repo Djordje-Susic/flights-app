@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { Subscription, of, forkJoin, Observable } from 'rxjs';
 import { map, mergeMap, switchMap, concatMap,  take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import * as xml2js from 'xml2js';
+
 import { Flight } from '../models/flight.model';
+import { XmlParserService } from './xml-parser.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class FlydataService {
   public serverUrl = environment.flyDataServer;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private xmlParserService: XmlParserService,
   ) { }
 
   getAirportFlightsData(airportCode: string){
@@ -22,7 +24,7 @@ export class FlydataService {
       responseType: 'text'
     }).pipe(
       take(1),
-      concatMap(response => this.parseXML(response)),
+      concatMap(response => this.xmlParserService.parseXML(response)),
       map(response => this.parseFlights(response)),
       map(response => this.filterDomesticFlights(response)),
     );
@@ -38,7 +40,7 @@ export class FlydataService {
       }
       worker.postMessage(`${this.serverUrl}/XmlFeed.asp?TimeFrom=1&TimeTo=24&airport=${airportCode}`);
     }).pipe(
-      concatMap(response => this.parseXML(<string>response)),
+      concatMap(response => this.xmlParserService.parseXML(<string>response)),
       map(response => this.parseFlights(response)),
       map(response => this.filterDomesticFlights(response)),
     );
@@ -69,18 +71,6 @@ export class FlydataService {
         }));
       })
     );
-  }
-
-  parseXML(data: string): Promise<any> {
-    return new Promise<any>(resolve => {
-      const parser = new xml2js.Parser({
-        trim: true,
-        explicitArray: false
-      });
-      parser.parseString(data, function (err: any, result: any) {
-        resolve(result);
-      });
-    });
   }
 
   parseFlights(data: any): Flight[] {
