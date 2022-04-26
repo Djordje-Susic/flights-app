@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { FlightDirectionCode } from '../shared/enums/flight-direction-code';
 import { Flight } from '../shared/models/flight.model';
 import { AirlineService } from '../shared/services/airline.service';
 import { AirportService } from '../shared/services/airport.service';
@@ -41,10 +42,10 @@ export class FlightsTableComponent implements OnInit, OnChanges {
         );
       })?.schedule_time;
 
-      if(flight.arr_dep === 'D') {
+      if(flight.arr_dep === FlightDirectionCode.DEPARTURE) {
         arrival_schedule_time = otherTime;
         departure_schedule_time = flight.schedule_time;
-      }else if(flight.arr_dep === 'A'){
+      }else if(flight.arr_dep === FlightDirectionCode.ARRIVAL){
         arrival_schedule_time = flight.schedule_time;
         departure_schedule_time = otherTime;
       }
