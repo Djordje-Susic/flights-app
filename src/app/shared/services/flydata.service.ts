@@ -50,7 +50,7 @@ export class FlydataService {
   }
 
   getAllRelated(airportCode: string){
-    return this.getAirportFlightsData(airportCode).pipe(
+    return this.getAirportFlightsDataWithWebWorker(airportCode).pipe(
       take(1),
       map(response => {
         return {
@@ -64,7 +64,7 @@ export class FlydataService {
           return of(response);
         }
 
-        const observables = uniqueAirportCodes.reduce((o, key) => ({ ...o, [key]: this.getAirportFlightsData(key)}), {})
+        const observables = uniqueAirportCodes.reduce((o, key) => ({ ...o, [key]: this.getAirportFlightsDataWithWebWorker(key)}), {})
 
         return forkJoin(observables).pipe(map(responses => {
           uniqueAirportCodes.forEach(code => {
