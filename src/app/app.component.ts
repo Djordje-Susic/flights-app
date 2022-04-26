@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   airportMap: {[key: string]: string} = {};
   flightsByAirport: {[key: string]: Flight[]} = {};
   selectedAirport: string = 'OSL';
-  // selectedAirport: string = 'DLD';
   isLoading = true;
 
   constructor(
@@ -38,7 +37,6 @@ export class AppComponent implements OnInit {
         this.airportMap = airportRequest;
         this.flightsByAirport = flightsRequest;
 
-        // console.log(this.flightsByAirport);
         console.log('All airports loaded:', (new Date).getTime() - startTime.getTime(), 'ms');
         this.isLoading = false;
       },
@@ -54,69 +52,10 @@ export class AppComponent implements OnInit {
         this.flightsByAirport = result;
         this.selectedAirport = airportCode;
         this.isLoading = false;
-        // console.log(this.flightsByAirport);
+
         console.log('Airports loaded:', (new Date).getTime() - startTime.getTime(), 'ms');
       },
       error => console.log(error)
     );
   }
-
-  // ngOnInit(): void {
-  //   const startTime: Date = new Date;
-  //   forkJoin(
-  //     [
-  //       this.airportService.getAll(),
-  //       this.flydataService.getAirportFlightsData(this.selectedAirport)
-  //     ]
-  //   ).subscribe(responses=> {
-  //       for (const airport of responses[0]) {
-  //         Object.assign(this.airportMap, {[airport.code]: airport.name})
-  //       }
-
-  //       this.flightsByAirport = {[this.selectedAirport]: responses[1]};
-  //       this.isLoading = false;
-  //       const uniqueCodes = this.flydataService.getUniqueAirportCodesFromFlightArr(this.flightsByAirport[this.selectedAirport]);
-  //       const observables = uniqueCodes.reduce((o, key) => ({ ...o, [key]:
-  //         // Option 1
-  //         // this.flydataService.getAirportFlightsData(key)
-
-  //         // Option 2
-  //         this.flydataService.getAirportFlightsData(key)
-  //       }), {})
-
-  //       forkJoin(observables).subscribe(responses => {
-  //         uniqueCodes.forEach(code => {
-  //           Object.assign(this.flightsByAirport, {[code]: responses[code]});
-  //         });
-
-  //         // console.log(this.flightsByAirport);
-
-  //         console.log('All airports loaded:', (new Date).getTime() - startTime.getTime(), 'ms');
-
-  //         this.flightsByAirport = {... this.flightsByAirport}
-  //       });
-  //     }
-  //   );
-  // }
-
-  // onAirportChange(airportCode: string){
-  //   this.flydataService.getAirportFlightsData(airportCode).subscribe(result => {
-  //     // this.flightsByAirport = { [airportCode]: result};
-  //     // this.selectedAirport = airportCode;
-  //     // console.log(airportCode)
-
-  //     const uniqueCodes = this.flydataService.getUniqueAirportCodesFromFlightArr(this.flightsByAirport[airportCode]);
-
-  //     const observables = uniqueCodes.reduce((o, key) => ({ ...o, [key]: this.flydataService.getAirportFlightsData(key)}), {})
-
-  //     forkJoin(observables).subscribe(responses => {
-  //       uniqueCodes.forEach(code => {
-  //         Object.assign(this.flightsByAirport, {[code]: responses[code]});
-  //       });
-  //       this.flightsByAirport = { [airportCode]: result};
-  //       this.selectedAirport = airportCode;
-  //     });
-
-  //   });
-  // }
 }
